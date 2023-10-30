@@ -1,89 +1,126 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
 export default function Signup() {
+  const router = useRouter();
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+    username: "",
+    fullname: "",
+    confirm_password: "",
+  });
+
+  const { fullname, username, email, password, confirm_password } = user;
+
+  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const onFormSubmit = async (e: any) => {
+    try {
+      e.preventDefault();
+
+      const response = await axios.post("/api/signup", user);
+      console.log("Signup completed", response.data);
+      toast.success(response.data.message);
+      router.push("/login");
+    } catch (error: any) {
+      console.log("Signup failed", error);
+      toast.error(error.message);
+    }
+  };
+
   return (
-    <form>
+    <form onSubmit={onFormSubmit}>
       <div className="relative z-0 w-full mb-6 group">
         <input
-          type="email"
-          name="floating_email"
-          id="floating_email"
+          type="text"
+          name="fullname"
+          id="fullname"
           className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          placeholder=" "
+          value={fullname}
+          onChange={handleFormChange}
           required
         />
         <label
-          htmlFor="floating_email"
+          htmlFor="fullname"
+          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >
+          Full Name
+        </label>
+      </div>
+      <div className="relative z-0 w-full mb-6 group">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          value={username}
+          onChange={handleFormChange}
+          required
+        />
+        <label
+          htmlFor="username"
+          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
+        >
+          Username
+        </label>
+      </div>
+      <div className="relative z-0 w-full mb-6 group">
+        <input
+          type="email"
+          name="email"
+          id="email"
+          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+          value={email}
+          onChange={handleFormChange}
+          required
+        />
+        <label
+          htmlFor="email"
           className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
         >
           Email address
         </label>
       </div>
-      <div className="relative z-0 w-full mb-6 group">
-        <input
-          type="password"
-          name="floating_password"
-          id="floating_password"
-          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          placeholder=" "
-          required
-        />
-        <label
-          htmlFor="floating_password"
-          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-        >
-          Password
-        </label>
-      </div>
-      <div className="relative z-0 w-full mb-6 group">
-        <input
-          type="password"
-          name="repeat_password"
-          id="floating_repeat_password"
-          className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-          placeholder=" "
-          required
-        />
-        <label
-          htmlFor="floating_repeat_password"
-          className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
-        >
-          Confirm password
-        </label>
-      </div>
       <div className="grid md:grid-cols-2 md:gap-6">
         <div className="relative z-0 w-full mb-6 group">
           <input
-            type="text"
-            name="floating_first_name"
-            id="floating_first_name"
+            type="password"
+            name="password"
+            id="password"
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
+            value={password}
+            onChange={handleFormChange}
             required
           />
           <label
-            htmlFor="floating_first_name"
+            htmlFor="password"
             className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
-            First name
+            Password
           </label>
         </div>
         <div className="relative z-0 w-full mb-6 group">
           <input
-            type="text"
-            name="floating_last_name"
-            id="floating_last_name"
+            type="password"
+            name="confirm_password"
+            id="confirm_password"
             className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-            placeholder=" "
+            value={confirm_password}
+            onChange={handleFormChange}
             required
           />
           <label
-            htmlFor="floating_last_name"
+            htmlFor="confirm_password"
             className="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transhtmlForm -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6"
           >
-            Last name
+            Confirm password
           </label>
         </div>
       </div>
